@@ -18,11 +18,30 @@ public class Resender extends Thread{
     private EditText editText;
     private TextView textView;
     private FloatingActionButton fab;
-    Resender(ObjectOutputStream output, EditText editText, TextView textView, FloatingActionButton fab){
+    private MainActivity mainActivity;
+    private String textFrom;
+    Resender(ObjectOutputStream output, EditText editText, TextView textView, FloatingActionButton fab, MainActivity mainActivity){
         this.editText = editText;
         this.output = output;
         this.textView = textView;
         this.fab = fab;
+        this.mainActivity = mainActivity;
+    }
+    private void changeText(final String s) {
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textView.append(s + "\n");
+            }
+        });
+    }
+    private void getTextfromText(){
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textFrom = (editText).getText().toString();
+            }
+        });
     }
     Resender(){}
     @Override
@@ -32,13 +51,13 @@ public class Resender extends Thread{
                 public void onClick(View view) {
                     try {
                         while (true) {
-                            String s;
                             Integer i;
-                            s = editText.getText().toString();
-                            Message messageToSend = new Message(s, -1);
+                            getTextfromText();
+                          //  s = editText.getText().toString();
+                            Message messageToSend = new Message(textFrom, -1);
                             output.writeObject(messageToSend);
                             output.flush();
-                            textView.append("You've sent: + " + s + "\n");
+                            textView.append("You've sent: + " + textFrom + "\n");
                         }
                     }catch(IOException e){
                         Snackbar.make(view, e.getStackTrace() + "\n", Snackbar.LENGTH_LONG)
