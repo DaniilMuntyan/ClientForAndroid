@@ -33,6 +33,8 @@ public class Message implements Serializable {
 
     @Override
     public String toString() {
+        if(idSender==-1)
+            return "Server has sent: " + data;
         return "User № " + idSender + " has sent: " + data;
     }
 }

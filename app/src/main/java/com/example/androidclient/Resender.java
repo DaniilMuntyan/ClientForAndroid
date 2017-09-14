@@ -53,11 +53,9 @@ public class Resender extends Thread{
                         while (true) {
                             Integer i;
                             getTextfromText();
-                          //  s = editText.getText().toString();
                             Message messageToSend = new Message(textFrom, -1);
                             output.writeObject(messageToSend);
                             output.flush();
-                            textView.append("You've sent: + " + textFrom + "\n");
                         }
                     }catch(IOException e){
                         Snackbar.make(view, e.getStackTrace() + "\n", Snackbar.LENGTH_LONG)

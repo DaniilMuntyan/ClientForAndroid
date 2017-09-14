@@ -17,30 +17,37 @@
         android:text=""
         tools:layout_editor_absoluteX="31dp"
         tools:layout_editor_absoluteY="360dp"
-        android:layout_marginTop="19dp"
-        android:layout_below="@+id/textView"
+        android:layout_alignBottom="@+id/button"
         android:layout_alignParentStart="true"
+        android:layout_marginBottom="48dp"
         android:layout_alignParentEnd="true" />
 
+
+    <ScrollView   android:layout_width="match_parent"
+        android:layout_height="5sp"
+        android:id="@+id/scrollView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/editText">
     <TextView
         android:id="@+id/textView"
-        android:layout_width="324dp"
-        android:layout_height="322dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:text="TextView"
         tools:layout_editor_absoluteY="20dp"
         tools:layout_editor_absoluteX="30dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true" />
+    </ScrollView>
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
         android:text="Start chat"
-        android:layout_below="@+id/editText"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="13dp" />
+        android:layout_marginBottom="15dp"
+        android:layout_above="@+id/editText2"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:id="@+id/editText2"
@@ -48,7 +55,10 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="55000"
-        android:layout_alignParentBottom="true" />
+        android:text="12145"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+
 
 </RelativeLayout>
