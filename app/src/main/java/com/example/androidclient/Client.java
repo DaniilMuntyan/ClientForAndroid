@@ -3,6 +3,7 @@ package com.example.androidclient;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -12,7 +13,8 @@ import java.net.Socket;
 
 public class Client implements Runnable {
 
-    private int PORT = 12145;
+    private int PORT;
+    private int ID;
     private ObjectInputStream input;
     private ObjectOutputStream output;
     private EditText editText;
@@ -20,12 +22,23 @@ public class Client implements Runnable {
     private FloatingActionButton fab;
     private MainActivity mainActivity;
     private Socket socket;
+    private EditText editTextID;
+    private EditText txtPort;
 
-    private void changeText(final String s) {
+    public void changeText(final String s) {
         mainActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                textView.append(s);
+                textView.append(s + "\n");
+            }
+        });
+    }
+    private void init(){
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                PORT = Integer.valueOf((txtPort.getText().toString()));
+                ID = Integer.valueOf(editTextID.getText().toString());
             }
         });
     }
@@ -37,9 +50,12 @@ public class Client implements Runnable {
                     @Override
                     public void onClick(View v) {
                         try {
-                            Message message = new Message(editText.getText().toString(), -1);
+                            init();
+                            Message message = new Message(editText.getText().toString(), ID);
                             output.writeObject(message);
                             output.flush();
+                            editText.setText("");
+                            changeText("You've sent: " + message.getData().toString() + " (ID = " + ID + ")");
                         }catch(IOException e){
                             e.printStackTrace();
                         }
@@ -52,26 +68,32 @@ public class Client implements Runnable {
     public void run() {
         // "0.tcp.ngrok.io"
         try {
-            changeText("Please wait...\n");
+            click();
+            init();
+            PORT = Integer.valueOf(txtPort.getText().toString());
+            changeText("Please wait... Port: " + " " + PORT);
             socket = new Socket("0.tcp.ngrok.io", PORT);
-            changeText("You have connected. Port: " + PORT + "\n");
+            changeText("You have connected. Port: " + PORT);
             input = new ObjectInputStream(socket.getInputStream());
             output = new ObjectOutputStream(socket.getOutputStream());
-            click();
             while(true){
                 Object messageToGet = input.readObject();
-                changeText(messageToGet.toString() + "\n");
+                changeText(messageToGet.toString());
             }
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
+    public Client(){
 
-    public Client(TextView textView, FloatingActionButton fab, EditText editText, EditText txtPort, MainActivity mainActivity) {
+    }
+    public Client(TextView textView, FloatingActionButton fab, EditText editText, EditText txtPort, ImageView imageView, EditText editTextID, MainActivity mainActivity) {
         this.textView = textView;
         this.fab = fab;
         this.editText = editText;
         this.mainActivity = mainActivity;
-        this.PORT = Integer.valueOf(txtPort.getText().toString());
+        this.txtPort = txtPort;
+        this.editTextID = editTextID;
+        ID = Integer.valueOf(editTextID.getText().toString());
     }
 }

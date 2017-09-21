@@ -20,12 +20,15 @@ public class Resender extends Thread{
     private FloatingActionButton fab;
     private MainActivity mainActivity;
     private String textFrom;
-    Resender(ObjectOutputStream output, EditText editText, TextView textView, FloatingActionButton fab, MainActivity mainActivity){
+    private int ID;
+    Resender(ObjectOutputStream output, EditText editText, TextView textView, FloatingActionButton fab, EditText editTextID, MainActivity mainActivity){
         this.editText = editText;
         this.output = output;
         this.textView = textView;
         this.fab = fab;
         this.mainActivity = mainActivity;
+        textFrom = editText.getText().toString();
+        ID = Integer.valueOf(editTextID.getText().toString());
     }
     private void changeText(final String s) {
         mainActivity.runOnUiThread(new Runnable() {
@@ -35,14 +38,14 @@ public class Resender extends Thread{
             }
         });
     }
-    private void getTextfromText(){
+  /*  private void getTextfromText(){
         mainActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 textFrom = (editText).getText().toString();
             }
         });
-    }
+    }*/
     Resender(){}
     @Override
     public void run(){
@@ -51,9 +54,8 @@ public class Resender extends Thread{
                 public void onClick(View view) {
                     try {
                         while (true) {
-                            Integer i;
-                            getTextfromText();
-                            Message messageToSend = new Message(textFrom, -1);
+                            //getTextfromText();
+                            Message messageToSend = new Message(textFrom, ID);
                             output.writeObject(messageToSend);
                             output.flush();
                         }

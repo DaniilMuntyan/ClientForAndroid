@@ -9,15 +9,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     private EditText editText;
-    private EditText txtPort;
+    private EditText txtPORT;
     private TextView textView;
     private Button button;
     private FloatingActionButton fab;
-
+    private ImageView imageView;
+    private EditText txtID;
     private MainActivity mainActivity;
 
     @Override
@@ -31,14 +33,15 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         editText = (EditText)findViewById(R.id.editText);
-        txtPort = (EditText)findViewById(R.id.editText2);
+        txtID = (EditText)findViewById(R.id.txtID);
+        txtPORT = (EditText)findViewById(R.id.txtPORT);
         textView = (TextView)findViewById(R.id.textView);
         textView.setText("");
         button = (Button)findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Thread(new Client(textView, fab, editText, txtPort, mainActivity)).start();
+                new Thread(new Client(textView, fab, editText, txtPORT,imageView, txtID, mainActivity)).start();
             }
         });
 
@@ -64,4 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
