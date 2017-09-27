@@ -1,5 +1,7 @@
 package com.example.androidclient;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.EditText;
@@ -24,12 +26,22 @@ public class Client implements Runnable {
     private Socket socket;
     private EditText editTextID;
     private EditText txtPort;
+    private ImageView imageView;
+    private ImageView imageView2;
 
-    public void changeText(final String s) {
+    private void changeText(final String s) {
         mainActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 textView.append(s + "\n");
+            }
+        });
+    }
+    private void changeImage(final Bitmap bit){
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                imageView.setImageBitmap(bit);
             }
         });
     }
@@ -67,8 +79,8 @@ public class Client implements Runnable {
     @Override
     public void run() {
         // "0.tcp.ngrok.io"
+        //"192.168.1.101"
         try {
-            click();
             init();
             PORT = Integer.valueOf(txtPort.getText().toString());
             changeText("Please wait... Port: " + " " + PORT);
@@ -76,10 +88,15 @@ public class Client implements Runnable {
             changeText("You have connected. Port: " + PORT);
             input = new ObjectInputStream(socket.getInputStream());
             output = new ObjectOutputStream(socket.getOutputStream());
-            while(true){
-                Object messageToGet = input.readObject();
-                changeText(messageToGet.toString());
-            }
+            Bitmap bitmap = Bitmap.createBitmap(100, 100,
+                    Bitmap.Config.ARGB_8888);
+            bitmap = ((BitmapDrawable) imageView2.getDrawable()).getBitmap();
+            BitmapDataObject bitData = new BitmapDataObject(bitmap, textView, mainActivity);
+            bitData.writeObject(output);
+            changeText("Sent the BitmapDataObject");
+            bitData.readObject(input);
+            changeText("Recieved the BitmapDataObject");
+            changeImage(bitData.getImage());
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -87,12 +104,14 @@ public class Client implements Runnable {
     public Client(){
 
     }
-    public Client(TextView textView, FloatingActionButton fab, EditText editText, EditText txtPort, ImageView imageView, EditText editTextID, MainActivity mainActivity) {
+    public Client(TextView textView, FloatingActionButton fab, EditText editText, EditText txtPort, ImageView imageView, EditText editTextID, ImageView imageView2, MainActivity mainActivity) {
         this.textView = textView;
         this.fab = fab;
         this.editText = editText;
         this.mainActivity = mainActivity;
         this.txtPort = txtPort;
+        this.imageView = imageView;
+        this.imageView2 = imageView2;
         this.editTextID = editTextID;
         ID = Integer.valueOf(editTextID.getText().toString());
     }

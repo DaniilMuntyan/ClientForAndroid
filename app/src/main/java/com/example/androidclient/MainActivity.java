@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
     private EditText txtID;
     private MainActivity mainActivity;
+    private ImageView imageView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +36,15 @@ public class MainActivity extends AppCompatActivity {
         editText = (EditText)findViewById(R.id.editText);
         txtID = (EditText)findViewById(R.id.txtID);
         txtPORT = (EditText)findViewById(R.id.txtPORT);
+        imageView = (ImageView)findViewById(R.id.imageView);
+        imageView2 = (ImageView)findViewById(R.id.imageView2);
         textView = (TextView)findViewById(R.id.textView);
         textView.setText("");
         button = (Button)findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Thread(new Client(textView, fab, editText, txtPORT,imageView, txtID, mainActivity)).start();
+                new Thread(new Client(textView, fab, editText, txtPORT,imageView, txtID, imageView2,  mainActivity)).start();
             }
         });
 
